@@ -10,7 +10,10 @@ defmodule Plugs.Mixfile do
 
   # Configuration for the OTP application
   def application do
-    []
+    [
+      applications: [:exlager],
+      mod: { Sugar.App, [] }
+    ]
   end
 
   # Returns the list of dependencies in the format:
@@ -21,7 +24,8 @@ defmodule Plugs.Mixfile do
   defp deps do
     [
       { :plug, github: "elixir-lang/plug" },
-      { :mime, github: "dynamo/mime" }
+      { :mime, github: "dynamo/mime" },
+      { :exlager, github: "khia/exlager" }
     ]
   end
 end
