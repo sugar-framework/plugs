@@ -4,7 +4,7 @@ defmodule Plugs.Mixfile do
   def project do
     [ app: :plugs,
       version: "0.0.1",
-      elixir: "~> 0.12.3",
+      elixir: "~> 0.12.4-dev",
       deps: deps ]
   end
 
@@ -19,6 +19,9 @@ defmodule Plugs.Mixfile do
   # To specify particular versions, regardless of the tag, do:
   # { :barbat, "~> 0.1", github: "elixir-lang/barbat" }
   defp deps do
-    []
+    [
+      { :plug, github: "elixir-lang/plug" },
+      { :mime, github: "dynamo/mime" }
+    ]
   end
 end
