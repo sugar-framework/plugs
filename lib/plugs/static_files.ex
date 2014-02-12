@@ -2,6 +2,8 @@ defmodule Plugs.StaticFiles do
   use Plug.Builder
   import Plug.Connection
 
+  def init(opts), do: opts
+
   def call(conn, opts) do
     url = String.split opts[:url], "/", trim: true
     path = Path.expand opts[:path]
