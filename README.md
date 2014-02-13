@@ -12,7 +12,7 @@ Options:
 Use:
 
 ```elixir
-quote do
+defmodule MyRouter do
   use Plug.Router
 
   plug Plugs.StaticFiles, url: "/static", path: "priv/static"
@@ -32,7 +32,7 @@ Used to log requests.
 Use:
 
 ```elixir
-quote do
+defmodule MyRouter do
   use Plug.Router
 
   plug Plugs.Logger
@@ -44,3 +44,22 @@ quote do
   ...
 end
 ```
+
+## `Plug.HotCodeReload`
+
+Used to add hot code reloading to a project, preventing the need to stop, recompile, and start your application to see your changes.
+
+Use:
+
+```elixir
+defmodule MyRouter do
+  use Plug.Router
+
+  plug Plugs.HotCodeReload
+
+  plug :match
+  plug :dispatch
+
+  # Rest of router definition
+  ...
+end
