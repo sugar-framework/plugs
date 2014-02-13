@@ -6,9 +6,7 @@ defmodule Plugs.HotCodeReload do
   def init(opts), do: opts
 
   def call(conn, _) do
-    reload = reload(Mix.env)
-    IO.inspect reload
-    case reload do
+    case reload(Mix.env) do
       :ok -> 
         location = "/" <> Enum.join conn.path_info, "/"
         conn
