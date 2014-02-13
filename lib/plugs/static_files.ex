@@ -1,6 +1,7 @@
 defmodule Plugs.StaticFiles do
-  use Plug.Builder
   import Plug.Connection
+
+  @behaviour Plug
 
   def init(opts), do: opts
 
