@@ -1,4 +1,4 @@
-defmodule Plugs.HotCodeReload do
+defmodule Sugar.Plugs.HotCodeReload do
   import Plug.Conn
 
   @behaviour Plug

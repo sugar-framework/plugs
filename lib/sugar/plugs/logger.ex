@@ -1,4 +1,4 @@
-defmodule Plugs.Logger do
+defmodule Sugar.Plugs.Logger do
   # require Lager
 
   @behaviour Plug.Wrapper
