@@ -39,8 +39,7 @@ defmodule Sugar.Plugs.Exceptions do
       kind, e ->
         env = System.get_env
         assigns = [
-          kind: atom_to_binary(e.__record__(:name) || kind)
-                  |> String.replace("Elixir.", ""),
+          kind: get_kind(e, kind),
           value: e,
           elixir_build_info: System.build_info,
           env: Map.keys(env) |> Enum.map(fn(key) ->
@@ -69,6 +68,15 @@ defmodule Sugar.Plugs.Exceptions do
     end
   end
 
+  defp get_kind(e, kind) when is_atom(e) do
+    kind
+  end
+  defp get_kind(e, _kind) when is_record(e) do
+    atom_to_binary(e.__record__(:name))
+      |> String.replace("Elixir.", "")
+  end
+
+  defp get_file_contents(nil), do: "no source available"
   defp get_file_contents(file) do
     if File.exists?(file) do
       File.read!(file)
@@ -85,11 +93,17 @@ defmodule Sugar.Plugs.Exceptions do
     "  Request: #{conn.method} /#{conn.path_info |> Enum.join("/")}\n"
   end
 
-  defp log_cause(:error, value) do
+  defp log_cause(:error, value) when is_atom(value) do
+    "  Cause: (Error) #{inspect value}\n"
+  end
+  defp log_cause(:error, value) when is_record(value) do
     "  Cause: (#{inspect value.__record__(:name)}) #{value.message}\n"
   end
+  defp log_cause(:error, value) do
+    "  Cause: (#{inspect value.__struct__(:name)}) #{value.message}\n"
+  end
 
-  defp logger_cause(kind, value) do
+  defp log_cause(kind, value) do
     "  Cause: (#{kind}) #{inspect(value)}\n"
   end
 
