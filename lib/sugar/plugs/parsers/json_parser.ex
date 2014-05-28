@@ -15,7 +15,7 @@ defmodule Sugar.Plugs.Parsers.JSON do
       {:too_large, state} ->
         {:too_large, %{conn | adapter: {adapter, state}}}
       {:ok, body, state} ->
-        decoded_body = body |> JSEX.decode! |> Map.new
+        decoded_body = body |> JSEX.decode!
         {:ok, decoded_body, %{conn | adapter: {adapter, state}}}
     end
   end
