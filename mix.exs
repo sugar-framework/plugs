@@ -9,13 +9,13 @@ defmodule Plugs.Mixfile do
       deps: deps(Mix.env),
       package: package,
       description: description,
-      docs: [readme: true, main: "README"] ]
+      docs: [readme: true, main: "README"],
+      test_coverage: [tool: ExCoveralls] ]
   end
 
   # Configuration for the OTP application
   def application do
-    [ applications: [],
-      mod: { Sugar.App, [] } ]
+    [ applications: [:plug] ]
   end
 
   defp deps(:prod) do
@@ -29,7 +29,8 @@ defmodule Plugs.Mixfile do
   end
 
   defp deps(_) do
-    deps(:prod)
+    deps(:prod) ++
+      [ { :excoveralls, "0.2.0" } ]
   end
 
   defp description do
@@ -41,6 +42,7 @@ defmodule Plugs.Mixfile do
   defp package do
     %{contributors: ["Shane Logsdon"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/sugar-framework/plugs"}}
+      links: %{"GitHub" => "https://github.com/sugar-framework/plugs",
+               "Docs" => "http://sugar-framework.github.io/docs/api/plugs/"}}
   end
 end
