@@ -4,7 +4,7 @@ defmodule Plugs.Mixfile do
   def project do
     [ app: :plugs,
       version: "0.0.2-dev",
-      elixir: ">= 0.13.0",
+      elixir: "~> 1.0.0-rc1",
       name: "Plugs",
       deps: deps(Mix.env),
       package: package,
@@ -19,19 +19,19 @@ defmodule Plugs.Mixfile do
   end
 
   defp deps(:prod) do
-    [ { :cowboy, "~> 0.9", github: "extend/cowboy" },
-      { :plug, "~> 0.4.3" },
+    [ { :cowboy, "~> 1.0.0" },
+      { :plug, "~> 0.7.0" },
       { :jsex, "~> 2.0.0"} ]
   end
 
   defp deps(:docs) do
     deps(:prod) ++
-      [ { :ex_doc, github: "elixir-lang/ex_doc" } ]
+      [ { :ex_doc, "~> 0.6.0"  } ]
   end
 
   defp deps(_) do
     deps(:prod) ++
-      [ { :excoveralls, "0.2.0" } ]
+      [ { :excoveralls, github: "parroty/excoveralls" } ]
   end
 
   defp description do

@@ -3,7 +3,7 @@ defmodule Sugar.Plugs.Exceptions do
   Catches runtime exceptions for displaying an error screen instead of an empty
   response in dev environments.
   """
-  @behaviour Plug.Wrapper
+  use Plug.Builder
   import Plug.Conn
 
   @doc """
@@ -20,21 +20,20 @@ defmodule Sugar.Plugs.Exceptions do
   def init(opts), do: opts
 
   @doc """
-  Wraps a connection for catching exceptions
+  "Watches" a connection for catching exceptions
 
   ## Arguments
 
   * `conn` - `Plug.Conn`
   * `opts` - `Keyword`
-  * `fun` - `Function`
 
   ## Returns
 
   `Plug.Conn`
   """
-  def wrap(conn, opts, fun) do
+  def call(conn, opts) do
     try do
-      fun.(conn)
+      super(conn, opts)
     catch
       kind, e ->
         env = System.get_env
@@ -47,8 +46,8 @@ defmodule Sugar.Plugs.Exceptions do
               value: Map.get(env, key) ]
           end),
           stacktrace: System.stacktrace |> Enum.map(fn({mod, fun, arr, meta}) ->
-            [ module: atom_to_binary(mod) |> String.replace("Elixir.", ""),
-              function: atom_to_binary(fun),
+            [ module: String.Chars.to_string(mod) |> String.replace("Elixir.", ""),
+              function: String.Chars.to_string(fun),
               arrity: arr,
               file: meta[:file],
               line: meta[:line],
@@ -71,9 +70,12 @@ defmodule Sugar.Plugs.Exceptions do
   defp get_kind(e, kind) when is_atom(e) do
     kind
   end
-  defp get_kind(e, _kind) when is_record(e) do
-    atom_to_binary(e.__record__(:name))
-      |> String.replace("Elixir.", "")
+  # defp get_kind(e, _kind) when is_struct(e) do
+  #   atom_to_binary(e.__record__(:name))
+  #     |> String.replace("Elixir.", "")
+  # end
+  defp get_kind(_e, kind) do
+    kind
   end
 
   defp get_file_contents(nil), do: "no source available"
@@ -96,11 +98,11 @@ defmodule Sugar.Plugs.Exceptions do
   defp log_cause(:error, value) when is_atom(value) do
     "  Cause: (Error) #{inspect value}\n"
   end
-  defp log_cause(:error, value) when is_record(value) do
-    "  Cause: (#{inspect value.__record__(:name)}) #{value.message}\n"
-  end
+  # defp log_cause(:error, value) when is_record(value) do
+  #   "  Cause: (#{inspect value.__record__(:name)}) #{value.message}\n"
+  # end
   defp log_cause(:error, value) do
-    "  Cause: (#{inspect value.__struct__(:name)}) #{value.message}\n"
+    "  Cause: (#{inspect value}) #{value.message}\n"
   end
 
   defp log_cause(kind, value) do
