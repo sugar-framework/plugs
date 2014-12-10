@@ -31,7 +31,7 @@ defmodule Plugs.Mixfile do
 
   defp deps(_) do
     deps(:prod) ++
-      [ { :excoveralls, github: "parroty/excoveralls" } ]
+      [ { :excoveralls, "~> 0.3" } ]
   end
 
   defp description do
