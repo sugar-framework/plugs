@@ -5,5 +5,5 @@
   "exprintf": {:hex, :exprintf, "0.1.0"},
   "jsex": {:hex, :jsex, "2.0.0"},
   "jsx": {:hex, :jsx, "2.0.4"},
-  "plug": {:hex, :plug, "0.7.0"},
+  "plug": {:hex, :plug, "0.9.0"},
   "ranch": {:hex, :ranch, "1.0.0"}}

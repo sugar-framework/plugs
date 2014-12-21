@@ -20,7 +20,7 @@ defmodule Plugs.Mixfile do
 
   defp deps(:prod) do
     [ { :cowboy, "~> 1.0.0" },
-      { :plug, "~> 0.7.0" },
+      { :plug, "~> 0.9.0" },
       { :jsex, "~> 2.0.0"} ]
   end
 
