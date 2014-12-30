@@ -3,13 +3,13 @@ defmodule Plugs.Mixfile do
 
   def project do
     [ app: :plugs,
-      version: "0.0.2-dev",
-      elixir: "~> 1.0.0-rc1",
+      version: "0.0.2",
+      elixir: "~> 1.0.0",
       name: "Plugs",
-      deps: deps(Mix.env),
+      deps: deps,
       package: package,
       description: description,
-      docs: [readme: true, main: "README"],
+      docs: [readme: "README.md", main: "README"],
       test_coverage: [tool: ExCoveralls] ]
   end
 
@@ -18,20 +18,12 @@ defmodule Plugs.Mixfile do
     [ applications: [:plug] ]
   end
 
-  defp deps(:prod) do
+  defp deps do
     [ { :cowboy, "~> 1.0.0" },
       { :plug, "~> 0.9.0" },
-      { :jsex, "~> 2.0.0"} ]
-  end
-
-  defp deps(:docs) do
-    deps(:prod) ++
-      [ { :ex_doc, "~> 0.6.0"  } ]
-  end
-
-  defp deps(_) do
-    deps(:prod) ++
-      [ { :excoveralls, "~> 0.3" } ]
+      { :ex_doc, "~> 0.6.2", only: :docs },
+      { :earmark, "~> 0.1.12", only: :docs },
+      { :excoveralls, "~> 0.3", only: :test } ]
   end
 
   defp description do
