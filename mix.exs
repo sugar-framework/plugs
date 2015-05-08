@@ -3,7 +3,7 @@ defmodule Plugs.Mixfile do
 
   def project do
     [ app: :plugs,
-      version: "0.0.2",
+      version: "0.0.3",
       elixir: "~> 1.0.0",
       name: "Plugs",
       deps: deps,
@@ -20,10 +20,10 @@ defmodule Plugs.Mixfile do
 
   defp deps do
     [ { :cowboy, "~> 1.0.0" },
-      { :plug, "~> 0.9.0" },
-      { :ex_doc, "~> 0.6.2", only: :docs },
-      { :earmark, "~> 0.1.12", only: :docs },
-      { :excoveralls, "~> 0.3", only: :test } ]
+      { :plug, "~> 0.12.2" },
+      { :ex_doc, "~> 0.7.2", only: :docs },
+      { :earmark, "~> 0.1.15", only: :docs },
+      { :excoveralls, "~> 0.3.10", only: :test } ]
   end
 
   defp description do
