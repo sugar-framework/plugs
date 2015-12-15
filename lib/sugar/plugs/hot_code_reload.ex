@@ -10,7 +10,7 @@ defmodule Sugar.Plugs.HotCodeReload do
       :ok ->
         location = "/" <> Enum.join conn.path_info, "/"
         conn
-          |> put_resp_header("Location", location)
+          |> put_resp_header("location", location)
           |> send_resp_if_not_sent(302, "")
       _   -> conn
     end
