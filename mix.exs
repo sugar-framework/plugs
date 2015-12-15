@@ -33,7 +33,7 @@ defmodule Plugs.Mixfile do
   end
 
   defp package do
-    %{contributors: ["Shane Logsdon"],
+    %{maintainers: ["Shane Logsdon", "Ryan S. Northrup"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/sugar-framework/plugs",
                "Docs" => "http://sugar-framework.github.io/docs/api/plugs/"}}
