@@ -18,6 +18,7 @@ defmodule MyRouter do
   # Rest of router definition
   ...
 end
+```
 
 ## `Sugar.Plugs.EnsureAuthenticated`
 
