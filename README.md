@@ -54,7 +54,7 @@ end
 
 Add this to a controller you want authentication on:
 
-```
+```elixir
 defmodule MyApp.Controllers.Foo do
   use Sugar.Controller
 
