@@ -50,24 +50,6 @@ defmodule MyApp.Router do
 end
 ```
 
-In your `my_app.ex` (note: only if using encrypted cookies with `Plug.Session`, as described above):
-
-```
-defmodule MyApp do
-  use Application
-
-  def start(_type, _args) do
-
-    # ...
-
-    :ets.new Plug.Keys, [:named_table, :public, read_concurrency: true]
-
-    # ...
-
-  end
-end
-```
-
 ### Use
 
 Add this to a controller you want authentication on:
