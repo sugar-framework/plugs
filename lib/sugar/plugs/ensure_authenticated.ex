@@ -90,6 +90,9 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
   defp ensure(conn, nil, opts), do: redirect(conn, destination(conn, opts))
   defp ensure(conn, user, _), do: assign(conn, :current_user, user)
 
+  defp destination(conn, %{redirect_to: redirect_to, return_to: nil}) do
+    redirect_to
+  end
   defp destination(conn, %{redirect_to: redirect_to, return_to: return_to}) do
     redirect_to <> return_to_params(conn, return_to)
   end
