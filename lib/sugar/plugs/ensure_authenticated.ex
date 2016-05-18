@@ -50,7 +50,7 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
 
   def verify(conn, %{only: actions} = opts) do
     if conn.private.action in actions do
-      conn |> verify(opts)
+      conn |> verify(opts |> Map.drop([:only, :except]))
     else
       conn
     end
@@ -59,7 +59,7 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
     if conn.private.action in actions do
       conn
     else
-      conn |> verify(opts)
+      conn |> verify(opts |> Map.drop([:only, :except]))
     end
   end
   def verify(conn, %{repo: repo, model: model} = opts) do
