@@ -26,7 +26,11 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
     unless is_list(only) and is_list(except), do: raise ArgumentError
 
     # main pieces
-    opts = %{handler: handler, model: model, repo: repo}
+    opts = %{ handler:     handler,
+              redirect_to: redirect_to,
+              return_to:   return_to,
+              model:       model,
+              repo:        repo }
 
     # sanitize
     cond do
