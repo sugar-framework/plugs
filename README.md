@@ -50,6 +50,8 @@ defmodule MyApp.Router do
 end
 ```
 
+You'll also want a controller to present a login page and authenticate a user (and possibly act on `conn.params["return_to"]`; see below).
+
 ### Use
 
 Add this to a controller you want authentication on:
@@ -76,6 +78,16 @@ If your controller has some actions that don't need authentication, then you can
 * Users should be directed to your app's `/login` route if they're not currently logged in
 
 The first two can be overridden by calling the plug as `plug Sugar.Plugs.EnsureAuthenticated, repo: My.Custom.Repo, model: My.Custom.Model` (should be self-explanatory).  The third can't be changed quite yet (TODO: add that configuration option), at least not without implementing a custom handler (see below).
+
+#### `:return_to` (`:origin` or an explicit URL)
+
+One can provide a `:return_to` option, which adds a query parameter (named `return_to` by default) to signal to a login page where the user should be redirected to after logging in.  The most automatic approach would be to set this to `:origin`, like so:
+
+```elixir
+plug Sugar.Plugs.EnsureAuthenticated, return_to: :origin
+```
+
+The above reads the connection's original path and sets `conn.params["return_to"]` automatically.
 
 #### Custom Handler
 

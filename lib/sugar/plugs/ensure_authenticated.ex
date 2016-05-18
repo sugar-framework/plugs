@@ -9,6 +9,10 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
   def init(opts) do
     handler =
       opts |> Keyword.get(:handler, {__MODULE__, :verify})
+    redirect_to =
+      opts |> Keyword.get(:redirect_to, "/login")
+    return_to =
+      opts |> Keyword.get(:return_to, nil)
     only =
       opts |> Keyword.get(:only, [])
     except =
@@ -22,7 +26,11 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
     unless is_list(only) and is_list(except), do: raise ArgumentError
 
     # main pieces
-    opts = %{handler: handler, model: model, repo: repo}
+    opts = %{ handler:     handler,
+              redirect_to: redirect_to,
+              return_to:   return_to,
+              model:       model,
+              repo:        repo }
 
     # sanitize
     cond do
@@ -46,7 +54,7 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
 
   def verify(conn, %{only: actions} = opts) do
     if conn.private.action in actions do
-      conn |> verify(opts)
+      conn |> verify(opts |> Map.drop([:only, :except]))
     else
       conn
     end
@@ -55,14 +63,14 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
     if conn.private.action in actions do
       conn
     else
-      conn |> verify(opts)
+      conn |> verify(opts |> Map.drop([:only, :except]))
     end
   end
-  def verify(conn, %{repo: repo, model: model}) do
+  def verify(conn, %{repo: repo, model: model} = opts) do
     conn = conn |> fetch_session
     user = conn |> get_session("user_id") |> get_user({repo, model})
 
-    conn |> ensure(user)
+    conn |> ensure(user, opts)
   end
 
   ## Helper functions
@@ -79,8 +87,26 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
   defp get_user(nil, _opts), do: nil
   defp get_user(id, {repo, model}), do: repo.get(model, id)
 
-  defp ensure(conn, nil), do: redirect(conn, "/login")
-  defp ensure(conn, user), do: assign(conn, :current_user, user)
+  defp ensure(conn, nil, opts), do: redirect(conn, destination(conn, opts))
+  defp ensure(conn, user, _), do: assign(conn, :current_user, user)
+
+  defp destination(conn, %{redirect_to: redirect_to, return_to: nil}) do
+    redirect_to
+  end
+  defp destination(conn, %{redirect_to: redirect_to, return_to: return_to}) do
+    redirect_to <> return_to_params(conn, return_to)
+  end
+
+  defp return_to_params(_conn, {_name, nil}), do: ""
+  defp return_to_params(conn, {name, :origin}) do
+    return_to_params(conn, {name, conn.request_path})
+  end
+  defp return_to_params(_conn, {name, value}) do
+    "?" <> URI.encode_query([{name, value}])
+  end
+  defp return_to_params(conn, value) do
+    return_to_params(conn, {"return_to", value})
+  end
 
   # Ported from Sugar.Controller.Helpers
   defp redirect(conn, location, opts \\ []) do
