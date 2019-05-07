@@ -6,9 +6,9 @@ defmodule Plugs.Mixfile do
       version: "0.1.1",
       elixir: "~> 1.0",
       name: "Plugs",
-      deps: deps,
-      package: package,
-      description: description,
+      deps: deps(),
+      package: package(),
+      description: description(),
       docs: [readme: "README.md", main: "README"],
       test_coverage: [tool: ExCoveralls] ]
   end
