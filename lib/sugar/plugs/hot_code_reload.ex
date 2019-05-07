@@ -1,30 +1,20 @@
 defmodule Sugar.Plugs.HotCodeReload do
-  import Plug.Conn
 
   @behaviour Plug
 
   def init(opts), do: opts
 
   def call(conn, _) do
-    case reload(Mix.env) do
-      :ok ->
-        location = "/" <> Enum.join conn.path_info, "/"
-        conn
-          |> put_resp_header("location", location)
-          |> send_resp_if_not_sent(302, "")
-      _   -> conn
-    end
+    reload(Mix.env)
+    conn
   end
 
   defp reload(:dev) do
-    Mix.Tasks.Compile.Elixir.run([])
+    Mix.Task.reenable "compile.elixir"
+    Mix.Task.reenable "compile.sugar"
+    Mix.Task.run "compile.elixir"
+    Mix.Task.run "compile.sugar"
   end
   defp reload(_), do: :noreload
 
-  defp send_resp_if_not_sent(%Plug.Conn{state: :sent} = conn, _, _) do
-    conn
-  end
-  defp send_resp_if_not_sent(conn, status, body) do
-    conn |> send_resp(status, body)
-  end
 end
