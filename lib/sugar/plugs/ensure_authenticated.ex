@@ -18,9 +18,9 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
     except =
       opts |> Keyword.get(:except, [])
     model =
-      opts |> Keyword.get(:model, basename |> concat(Models) |> concat(User))
+      opts |> Keyword.get(:model, basename() |> concat(Models) |> concat(User))
     repo =
-      opts |> Keyword.get(:repo, basename |> concat(Repos) |> concat(Main))
+      opts |> Keyword.get(:repo, basename() |> concat(Repos) |> concat(Main))
 
     # sanity checks
     unless is_list(only) and is_list(except), do: raise ArgumentError
@@ -78,7 +78,7 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
   defp basename do
     {result, _} = Mix.Project.config[:app]
     |> String.Chars.to_string
-    |> Mix.Utils.camelize
+    |> Macro.camelize
     |> Code.eval_string
 
     result
@@ -90,7 +90,7 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
   defp ensure(conn, nil, opts), do: redirect(conn, destination(conn, opts))
   defp ensure(conn, user, _), do: assign(conn, :current_user, user)
 
-  defp destination(conn, %{redirect_to: redirect_to, return_to: nil}) do
+  defp destination(_conn, %{redirect_to: redirect_to, return_to: nil}) do
     redirect_to
   end
   defp destination(conn, %{redirect_to: redirect_to, return_to: return_to}) do
