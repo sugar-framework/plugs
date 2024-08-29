@@ -6,9 +6,9 @@ defmodule Plugs.Mixfile do
       version: "0.1.1",
       elixir: "~> 1.0",
       name: "Plugs",
-      deps: deps,
-      package: package,
-      description: description,
+      deps: deps(),
+      package: package(),
+      description: description(),
       docs: [readme: "README.md", main: "README"],
       test_coverage: [tool: ExCoveralls] ]
   end
@@ -19,11 +19,13 @@ defmodule Plugs.Mixfile do
   end
 
   defp deps do
-    [ { :cowboy, "~> 1.0" },
-      { :plug, "~> 1.0" },
-      { :ex_doc, "~> 0.8", only: :docs },
-      { :earmark, "~> 0.1", only: :docs },
-      { :excoveralls, "~> 0.3", only: :test } ]
+    [
+      {:cowboy, "~> 1.0"},
+      {:plug, "~> 1.16"},
+      {:ex_doc, "~> 0.8", only: :docs},
+      {:earmark, "~> 0.1", only: :docs},
+      {:excoveralls, "~> 0.18", only: :test}
+    ]
   end
 
   defp description do

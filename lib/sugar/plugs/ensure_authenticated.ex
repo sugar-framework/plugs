@@ -18,9 +18,10 @@ defmodule Sugar.Plugs.EnsureAuthenticated do
     except =
       opts |> Keyword.get(:except, [])
     model =
-      opts |> Keyword.get(:model, basename |> concat(Models) |> concat(User))
+      opts |> Keyword.get(:model, basename() |> concat(Models) |> concat(User))
+
     repo =
-      opts |> Keyword.get(:repo, basename |> concat(Repos) |> concat(Main))
+      opts |> Keyword.get(:repo, basename() |> concat(Repos) |> concat(Main))
 
     # sanity checks
     unless is_list(only) and is_list(except), do: raise ArgumentError
